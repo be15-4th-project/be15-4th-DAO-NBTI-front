@@ -14,9 +14,11 @@ const toast = useToast();
 
 const radarCanvas = ref(null);
 
-const modalVisible = ref(false);
-const modalMessage = ref('');
+const urlModalVisible = ref(false);
+const urlModalMessage = ref('');
+
 const isUser = computed(() => authStore.isAuthenticated);
+const isUserTest = ref(false);
 const testResultId = route.params.testResultId;
 const maxScore = ref(0);
 
@@ -41,6 +43,7 @@ onMounted(async () => {
         summary.value = res.data.data.aiText;
 
         const userId = res.data.data.userId;
+        isUserTest.value = !!userId;
         const maxScoreValue = userId ? 6 : 2;
 
         await nextTick();
@@ -89,16 +92,22 @@ onMounted(async () => {
 
 /* 모달과 관련된 함수들 (open, close) */
 function openModal() {
-    modalMessage.value = window.location.href
-    modalVisible.value = true
+    urlModalMessage.value = window.location.href
+    urlModalVisible.value = true
 }
 
 function closeModal() {
-    modalVisible.value = false
+    urlModalVisible.value = false
 }
 
 /* 마이페이지에 저장하는 api*/
 async function saveToMyPage() {
+    if (!isUser.value) {
+        urlModalMessage.value = '회원가입한 사용자만 이용할 수 있습니다!';
+        urlModalVisible.value = true;
+        return;
+    }
+
     try {
         await saveResultToMyPage(testResultId);
         toast.success('마이페이지에 저장되었습니다.');
@@ -109,7 +118,6 @@ async function saveToMyPage() {
             if (code === '30005') {
                 toast.error('해당 검사는 본인이 한 검사가 아닙니다.');
             }
-
         } else {
             toast.error('마이페이지 저장에 실패했습니다. 다시 시도해주세요.');
         }
@@ -160,14 +168,22 @@ function goToMain() {
             <p>{{ summary }}</p>
         </div>
 
+        <div class="guest-hint" v-if="!isUserTest">
+            <p>
+                🔒 회원 가입하면 더 다양한 문제를 풀 수 있습니다.
+            </p>
+        </div>
+
         <div class="buttons">
             <button class="btn" @click="saveToMyPage" v-if="isUser">저장하기</button>
             <button class="btn" @click="openModal">공유하기</button>
+
             <Url
-                :visible="modalVisible"
-                :message="modalMessage"
+                :visible="urlModalVisible"
+                :message="urlModalMessage"
                 @close="closeModal"
             />
+
             <button class="btn" @click="goToMain">메인으로</button>
         </div>
     </div>
@@ -309,4 +325,16 @@ h2 {
 .btn:hover {
     background: #1e3a8a;
 }
+
+.guest-hint {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #fff4f4;
+    border: 1px solid #fca5a5;
+    border-radius: 12px;
+    text-align: center;
+    color: #b91c1c;
+    font-size: 0.95rem;
+}
+
 </style>
