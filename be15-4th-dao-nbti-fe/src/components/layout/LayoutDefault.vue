@@ -1,5 +1,6 @@
 <script setup>
 import Header from "@/components/layout/Header.vue";
+import Footer from "@/components/layout/Footer.vue";
 
 </script>
 
@@ -11,9 +12,9 @@ import Header from "@/components/layout/Header.vue";
     <div class="content-wrapper">
       <main class="main-content" >
         <RouterView/>
+        <Footer/>
       </main>
     </div>
-    <Footer/>
   </div>
 </template>
 
