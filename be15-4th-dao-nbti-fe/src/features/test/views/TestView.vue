@@ -3,6 +3,7 @@ import { ref, onMounted, watchEffect, computed, onBeforeUnmount, nextTick } from
 import { useRouter } from 'vue-router'
 import { useToast } from "vue-toastification";
 import { getProblems, submitAnswers } from "@/features/test/api.js"
+import Loading from "@/features/test/components/Loading.vue";
 
 const router = useRouter();
 const toast = useToast();
@@ -250,9 +251,8 @@ watchEffect(() => {
 
 
 <template>
-    <div v-if="isLoading" class="loading-overlay">
-        <div class="spinner" />
-        <p>결과를 불러오는 중입니다...</p>
+    <div v-if="isLoading">
+        <Loading/>
     </div>
 
     <div v-else class="timer">{{ timerDisplay }}</div>
@@ -571,34 +571,5 @@ watchEffect(() => {
     display: flex;
     justify-content: center;
     gap: 1rem;
-}
-
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 50;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #3b82f6;
-    border-top-color: transparent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
 }
 </style>
