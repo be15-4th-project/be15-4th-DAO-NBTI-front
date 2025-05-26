@@ -13,19 +13,13 @@ const authStore = useAuthStore()
 const { isAuthenticated, userRole } = storeToRefs(authStore)
 const isUser = computed(() =>isAuthenticated.value && userRole.value === 'USER')
 const isAdmin = computed(() =>isAuthenticated.value && userRole.value === 'ADMIN')
-function handleLoginSuccess() {
 
-  const redirectTo = route.query.redirect || '/mypage'
-  router.push(redirectTo)
-}
 const form = reactive({
   loginId: '',
   password: ''
 })
 const modalVisible = ref(false)
 const modalMessage = ref('')
-const loginSuccess = ref(false);
-
 
 const login = async () => {
   try {
@@ -35,24 +29,21 @@ const login = async () => {
     });
     const accessToken = response.data.data.accessToken;
     authStore.setAuth(accessToken);
-    modalMessage.value = "로그인에 성공했습니다."
-    loginSuccess.value=true
-  }  catch (error) {
-    modalMessage.value = '올바르지 않은 입력입니다.'
 
-  } finally {
-    modalVisible.value = true;
+    if(isUser.value)
+        await router.push('/');
+    else if(isAdmin.value)
+        await router.push('/admin')
+
+  }  catch (error) {
+      modalVisible.value = true;
+      modalMessage.value = '아이디 또는 비밀번호를 확인해주세요.'
+
   }
 }
 
-const closeModal = async() => {
-  modalVisible.value=false;
-  if(loginSuccess.value===true){
-    if(isUser.value)
-      await router.push('/');
-    else if(isAdmin.value)
-      await router.push('/admin')
-  }
+const closeModal = () => {
+    modalVisible.value = false;
 }
 
 </script>

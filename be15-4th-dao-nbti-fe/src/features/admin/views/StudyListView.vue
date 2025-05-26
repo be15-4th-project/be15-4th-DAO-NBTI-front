@@ -10,7 +10,7 @@ const parentCategories = ref([]);
 const totalItems = ref(0)
 const totalPages = ref(0)
 const filter = ref({
-  userId: '',
+  accountId: '',
   parentCategoryId: '',
   startDate:null,
   endDate: null,
@@ -21,7 +21,7 @@ const filter = ref({
 const loadStudyResult = async () => {
   const queryParams = new URLSearchParams()
   try {
-    if (filter.value.userId) queryParams.append('accountId', filter.value.userId)
+    if (filter.value.accountId) queryParams.append('accountId', filter.value.accountId)
     if (filter.value.parentCategoryId !== null) queryParams.append('parentCategoryId', filter.value.parentCategoryId)
     if (filter.value.startDate !== null) queryParams.append('startDate', filter.value.startDate)
     if (filter.value.endDate !== null) queryParams.append('endDate', filter.value.endDate)
@@ -68,9 +68,6 @@ onMounted(async () => {
 })
 </script>
 
-
-
-
 <template>
   <main class="content">
     <section class="section">
@@ -81,23 +78,23 @@ onMounted(async () => {
         <div class="filter-bar">
           <label for="filter-member">회원 ID</label>
           <input
-              id="filter-member"
-              type="text"
-              v-model="filter.accountId"
-              placeholder="회원 ID 검색"
+            id="filter-member"
+            type="text"
+            v-model="filter.accountId"
+            placeholder="회원 ID 검색"
           />
 
           <label for="filter-startDate">검색 시작일</label>
           <input
-              id="filter-startDate"
-              type="date"
-              v-model="filter.startDate"
+            id="filter-startDate"
+            type="date"
+            v-model="filter.startDate"
           />
           <label for="filter-startDate">검색 종료일</label>
           <input
-              id="filter-endDate"
-              type="date"
-              v-model="filter.endDate"
+            id="filter-endDate"
+            type="date"
+            v-model="filter.endDate"
           />
           <label for="filter-parent-category">분야</label>
           <select id="filter-parent-category" v-model="filter.parentCategoryId">
@@ -125,14 +122,15 @@ onMounted(async () => {
           </thead>
           <tbody>
           <tr v-for="studyResult in studyResult" :key="studyResult.studyId">
-            <td>{{ studyResult.userId }}</td>
+            <td>{{ studyResult.accountId }}</td>
             <td>{{ formatDateTimeWithWeekday(studyResult.createdAt) }}</td>
             <td>{{ studyResult.parentCategoryName }}</td>
             <td>{{ studyResult.correctCount }}</td>
-            <td><RouterLink :to="`/admin/study/${studyResult.studyId}`">
-              상세보기
-            </RouterLink></td>
-
+            <td>
+              <RouterLink :to="`/admin/study/${studyResult.studyId}`">
+                <button class="detail-btn">상세보기</button>
+              </RouterLink>
+            </td>
           </tr>
 
           <tr v-if="studyResult.length === 0">
@@ -142,10 +140,10 @@ onMounted(async () => {
         </table>
 
         <PagingBar
-            :current-page="filter.page"
-            :total-pages="totalPages"
-            :total-items="totalItems"
-            @page-changed="changePage"
+          :current-page="filter.page"
+          :total-pages="totalPages"
+          :total-items="totalItems"
+          @page-changed="changePage"
         />
       </div>
     </section>
@@ -186,7 +184,17 @@ onMounted(async () => {
   border-radius: 8px;
 }
 
-.pagination { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1rem; }
 .pagination button { padding: 0.4rem 0.8rem; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; }
 .pagination button.active { background: #007bff; color: #fff; border-color: #007bff; }
+
+.detail-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
 </style>

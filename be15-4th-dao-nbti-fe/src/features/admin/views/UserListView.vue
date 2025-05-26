@@ -97,7 +97,7 @@ const changePage = (page) => {
           <tr v-for="user in users" :key="user.accountId">
             <td>{{ user.accountId }}</td>
             <td>{{ user.name }}</td>
-            <td>{{ user.gender }}</td>
+            <td>{{ user.gender === 'M' ? '남자' : '여자' }}</td>
             <td>{{ user.birthdate }}</td>
             <td>{{ user.point ?? 0 }}</td>
             <td>{{ user.isDeleted==="Y" ? 'O' : 'X' }}</td>
