@@ -24,10 +24,8 @@ const loadTestResult = async () => {
     if (filter.value.month !== null) queryParams.append('month', filter.value.month)
     if (filter.value.page !== undefined) queryParams.append('page', filter.value.page-1)
     if (filter.value.size !== undefined) queryParams.append('size', filter.value.size)
-    console.log(queryParams.toString())
     const response = await fetchTestResultList(queryParams.toString())
     const data = response.data.data
-    console.log(data)
     testResults.value = data.content
     totalPages.value = data.pagination.totalPage
     totalItems.value = data.pagination.totalItems
