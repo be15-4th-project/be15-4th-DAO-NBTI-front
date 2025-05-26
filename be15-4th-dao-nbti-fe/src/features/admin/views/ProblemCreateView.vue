@@ -62,10 +62,10 @@ const createProblem = async () => {
   formData.append('imageFile', problem.value.imageFile);
 
   try {
-    await api.post('/admin/problems', formData, {
+    const response = await api.post('/admin/problems', formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
-    toast.success('문제가 성공적으로 등록되었습니다.');
+    toast.success(`${response.data.data.problem.problemId}번 문제가 성공적으로 등록되었습니다.`);
     router.push('/admin/problems/');
   } catch (e) {
     toast.error('문제 등록에 실패했습니다.');
