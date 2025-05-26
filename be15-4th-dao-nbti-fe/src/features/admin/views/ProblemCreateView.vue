@@ -65,8 +65,9 @@ const createProblem = async () => {
     const response = await api.post('/admin/problems', formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
-    toast.success(`${response.data.data.problem.problemId}번 문제가 성공적으로 등록되었습니다.`);
-    router.push('/admin/problems/');
+    const problemId = response.data.data.problem.problemId;
+    toast.success(`문제가 성공적으로 등록되었습니다.`);
+    router.push(`/admin/problems/${problemId}`);
   } catch (e) {
     toast.error('문제 등록에 실패했습니다.');
     // console.error(e);
