@@ -116,9 +116,11 @@ const formatDateTimeWithWeekday = (datetimeStr) => {
             <td>{{ testResult.highestCategory }}</td>
             <td>{{ testResult.lowestCategory }}</td>
             <td>{{ testResult.totalScore }}</td>
-            <td><RouterLink :to="`/admin/test/${testResult.testResultId}`">
-              상세보기
-            </RouterLink></td>
+            <td>
+              <RouterLink :to="`/admin/test/${testResult.testResultId}`">
+              <button class="detail-btn">상세보기</button>
+              </RouterLink>
+            </td>
 
           </tr>
 
@@ -138,8 +140,6 @@ const formatDateTimeWithWeekday = (datetimeStr) => {
     </section>
   </main>
 </template>
-
-
 
 <style scoped>
 .card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 1rem; }
@@ -173,12 +173,21 @@ const formatDateTimeWithWeekday = (datetimeStr) => {
   border-radius: 8px;
 }
 
-.pagination { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1rem; }
 .pagination button { padding: 0.4rem 0.8rem; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; }
-.pagination button.active { background: #007bff; color: #fff; border-color: #007bff; }
+.pagination button { background: #007bff; color: #fff; border-color: #007bff; }
 
 a{
   color: #007bff;
+}
+
+.detail-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
 </style>
