@@ -27,10 +27,8 @@ const loadStudyResult = async () => {
     if (filter.value.endDate !== null) queryParams.append('endDate', filter.value.endDate)
     if (filter.value.page !== undefined) queryParams.append('page', filter.value.page)
     if (filter.value.size !== undefined) queryParams.append('size', filter.value.size)
-    console.log(queryParams.toString())
     const response = await fetchStudyResult(queryParams.toString())
     const data = response.data.data
-    console.log(data)
     studyResult.value = data.studies
     totalPages.value = data.pagination.totalPage
     totalItems.value = data.pagination.totalItems
