@@ -41,7 +41,7 @@ const loadStudyResult = async () => {
 const fetchCategories = async () => {
   const response = await api.get('/admin/categories')
   parentCategories.value = response.data.data.parentCategories;
-  categories.value = response.data.data.childCategories;
+  // categories.value = response.data.data.childCategories;
 }
 
 const onSearch = () => {
