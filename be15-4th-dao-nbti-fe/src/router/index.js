@@ -32,18 +32,31 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const auth = useAuthStore()
+    const toast = useToast()
+
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+    // 모든 매칭된 라우트의 roles 수집
+    const requiredRoles = to.matched
+        .flatMap(record => record.meta?.roles || [])
+
 
     if (requiresAuth && !auth.accessToken) {
         // 사용자에게 알림 (옵션)
-        const toast = useToast()
         toast.error('로그인이 필요한 페이지입니다.')
 
         // 로그인 페이지로 이동 + 원래 목적지 기억
         next({ path: '/login', query: { redirect: to.fullPath } })
-    } else {
-        next()
     }
+    // 2. role 권한이 필요한데 현재 유저 role이 포함되어 있지 않으면
+    if (requiredRoles.length > 0 && !requiredRoles.includes(auth.userRole)) {
+        toast.error('접근 권한이 없습니다.')
+        if (auth.userRole === 'ADMIN') {
+            return next({ path: '/admin'})
+        }
+        return next({ path: '/' }) // 메인 페이지로 보내기
+    }
+
+        next()
 })
 
 export default router
