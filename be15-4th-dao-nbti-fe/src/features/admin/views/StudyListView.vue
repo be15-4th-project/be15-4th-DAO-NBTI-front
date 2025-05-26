@@ -21,7 +21,7 @@ const filter = ref({
 const loadStudyResult = async () => {
   const queryParams = new URLSearchParams()
   try {
-    if (filter.value.userId) queryParams.append('accountId', filter.value.userId)
+    if (filter.value.userId) queryParams.append('userId', filter.value.userId)
     if (filter.value.parentCategoryId !== null) queryParams.append('parentCategoryId', filter.value.parentCategoryId)
     if (filter.value.startDate !== null) queryParams.append('startDate', filter.value.startDate)
     if (filter.value.endDate !== null) queryParams.append('endDate', filter.value.endDate)
@@ -83,7 +83,7 @@ onMounted(async () => {
           <input
               id="filter-member"
               type="text"
-              v-model="filter.accountId"
+              v-model="filter.userId"
               placeholder="회원 ID 검색"
           />
 
