@@ -13,83 +13,66 @@ const authStore = useAuthStore()
 const { isAuthenticated, userRole } = storeToRefs(authStore)
 const isUser = computed(() =>isAuthenticated.value && userRole.value === 'USER')
 const isAdmin = computed(() =>isAuthenticated.value && userRole.value === 'ADMIN')
-function handleLoginSuccess() {
 
-  const redirectTo = route.query.redirect || '/mypage'
-  router.push(redirectTo)
-}
 const form = reactive({
-  loginId: '',
-  password: ''
+    loginId: '',
+    password: ''
 })
+
 const modalVisible = ref(false)
 const modalMessage = ref('')
-const loginSuccess = ref(false);
 
 
 const login = async () => {
-  console.log(`${form.loginId} ${form.password}`);
-  try {
-    const response = await loginUser({
-      accountId: form.loginId,
-      password: form.password
-    });
+    try {
+        const response = await loginUser({
+            accountId: form.loginId,
+            password: form.password
+        });
+        const accessToken = response.data.data.accessToken;
+        authStore.setAuth(accessToken);
 
-    if (response.data.success === false) {
-      throw new Error(response.data.message);
+        if(isUser.value)
+            await router.push('/');
+        else if(isAdmin.value)
+            await router.push('/admin')
+
+    } catch (error) {
+        modalVisible.value = true;
+        modalMessage.value = '아이디 또는 비밀번호를 확인해주세요. '
     }
-
-    console.log('로그인 성공', response.data)
-    const accessToken = response.data.data.accessToken;
-    console.log(`토큰 ${accessToken}`)
-    authStore.setAuth(accessToken);
-    modalMessage.value = "로그인에 성공했습니다."
-    loginSuccess.value=true
-  }  catch (error) {
-    modalMessage.value = error.response?.data?.message;
-
-  } finally {
-    modalVisible.value = true;
-  }
 }
 
-const closeModal = async() => {
-  modalVisible.value=false;
-  if(loginSuccess.value===true){
-    console.log('권한 : '+isUser.value)
-    if(isUser.value)
-      await router.push('/');
-    else if(isAdmin.value)
-      await router.push('/admin')
-  }
+function closeModal() {
+    modalVisible.value = false;
 }
 
 </script>
 
 <template>
-  <div class = "find-view">
-    <LoginForm
-        v-model:loginId="form.loginId"
-        v-model:password="form.password"
-        @login="login"
+    <div class = "find-view">
+        <LoginForm
+            v-model:loginId="form.loginId"
+            v-model:password="form.password"
+            @login="login"
         />
 
-  </div>
-  <small-modal
-      :visible="modalVisible"
-      @cancel="closeModal"
-  ><p>{{ modalMessage }}</p>
-  </small-modal>
+    </div>
+    <small-modal
+        :visible="modalVisible"
+        @cancel="closeModal"
+    ><p>{{ modalMessage }}</p>
+    </small-modal>
 
 </template>
 
 <style>
 
 .find-view{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  padding-top : 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding-top : 80px;
 }
- </style>
+</style>
