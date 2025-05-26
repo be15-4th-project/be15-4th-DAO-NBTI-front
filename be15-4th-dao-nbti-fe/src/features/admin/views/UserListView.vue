@@ -25,10 +25,8 @@ const fetchUsers = async () => {
     if (filter.value.isDeleted !== null) queryParams.append('isDeleted', filter.value.isDeleted)
     if (filter.value.page !== undefined) queryParams.append('page', filter.value.page-1)
     if (filter.value.size !== undefined) queryParams.append('size', filter.value.size)
-    console.log(queryParams.toString())
     const response = await fetchUserList(queryParams.toString())
     const data = response.data.data
-    console.log(data)
     users.value = data.page.content
     totalPages.value = data.page.totalPages
     //filter.value.size = data.page.numberOfElements

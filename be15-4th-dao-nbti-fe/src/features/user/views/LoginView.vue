@@ -28,17 +28,12 @@ const loginSuccess = ref(false);
 
 
 const login = async () => {
-  console.log(`${form.loginId} ${form.password}`);
   try {
     const response = await loginUser({
       accountId: form.loginId,
       password: form.password
     });
-
-
-    console.log('로그인 성공', response.data)
     const accessToken = response.data.data.accessToken;
-    console.log(`토큰 ${accessToken}`)
     authStore.setAuth(accessToken);
     modalMessage.value = "로그인에 성공했습니다."
     loginSuccess.value=true
@@ -53,7 +48,6 @@ const login = async () => {
 const closeModal = async() => {
   modalVisible.value=false;
   if(loginSuccess.value===true){
-    console.log('권한 : '+isUser.value)
     if(isUser.value)
       await router.push('/');
     else if(isAdmin.value)
