@@ -21,7 +21,7 @@
           </div>
           <div class="info-row">
             <span class="label">성별</span>
-            <span class="value">{{ userInfo.gender }}</span>
+            <span class="value">{{ genderLabel }}</span>
           </div>
           <div class="info-row">
             <span class="label">보유 포인트</span>
@@ -94,6 +94,12 @@ const closeModal = async () => {
     await router.push('/')
   }
 }
+const genderLabel = computed(() => {
+  if (userInfo.value.gender === 'M') return '남성';
+  if (userInfo.value.gender === 'F') return '여성';
+  return userInfo.value.gender || ''; // 혹시 값이 없거나 예외적인 경우 대비
+});
+
 
 const showSubmitModal = async () => {
   modalVisible.value = false;
