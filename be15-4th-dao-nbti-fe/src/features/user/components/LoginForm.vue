@@ -24,34 +24,37 @@ const passwordModel = computed({
 function login(){
   emit('login');
 }
-
-
-
 </script>
 
 <template>
-  <div class="section">
+    <div
+        class="section"
+        tabindex="0"
+        @keydown.enter="login"
+    >
     <div class="heading">
-      로그인
+        로그인
     </div>
     <div class="form">
-      <UserInput
-          v-model="loginIdModel"
-          label="로그인 ID"
-          placeholder="로그인 ID를 입력해주세요"/>
-      <UserInput
-          v-model="passwordModel"
-          label="비밀번호"
-          placeholder="비밀번호를 입력해주세요"
-          type="password"
-      />
+        <UserInput
+            v-model="loginIdModel"
+            label="로그인 ID"
+            placeholder="로그인 ID를 입력해주세요"
+        />
+        <UserInput
+            v-model="passwordModel"
+            label="비밀번호"
+            placeholder="비밀번호를 입력해주세요"
+            type="password"
+        />
 
-      <BlueButton
-          text="로그인"
-          @click="login"/>
+        <BlueButton
+            text="로그인"
+            @click="login"
+        />
     </div>
     <RouterLink to="/find-password">비밀번호 찾기</RouterLink>
-  </div>
+    </div>
 </template>
 
 <style scoped>

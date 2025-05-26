@@ -22,9 +22,9 @@ const form = reactive({
   loginId: '',
   password: ''
 })
+
 const modalVisible = ref(false)
 const modalMessage = ref('')
-const loginSuccess = ref(false);
 
 
 const login = async () => {
@@ -35,30 +35,24 @@ const login = async () => {
       password: form.password
     });
 
-
     console.log('로그인 성공', response.data)
     const accessToken = response.data.data.accessToken;
     console.log(`토큰 ${accessToken}`)
     authStore.setAuth(accessToken);
-    modalMessage.value = "로그인에 성공했습니다."
-    loginSuccess.value=true
-  }  catch (error) {
-    modalMessage.value = '올바르지 않은 입력입니다.'
 
-  } finally {
-    modalVisible.value = true;
+    if(isUser.value)
+        await router.push('/');
+    else if(isAdmin.value)
+        await router.push('/admin')
+
+  }  catch (error) {
+      modalVisible.value = true;
+      modalMessage.value = '아이디 또는 비밀번호를 확인해주세요. '
   }
 }
 
-const closeModal = async() => {
-  modalVisible.value=false;
-  if(loginSuccess.value===true){
-    console.log('권한 : '+isUser.value)
-    if(isUser.value)
-      await router.push('/');
-    else if(isAdmin.value)
-      await router.push('/admin')
-  }
+function closeModal()  {
+    modalVisible.value = false;
 }
 
 </script>
@@ -81,7 +75,6 @@ const closeModal = async() => {
 </template>
 
 <style>
-
 .find-view{
   display: flex;
   flex-direction: column;
