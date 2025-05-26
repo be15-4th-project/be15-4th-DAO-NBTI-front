@@ -4,7 +4,7 @@
     <div class ="card-section">
       <div class="card">
         <div class="card-header">
-          <div class="avatar"></div>
+          <div class="avatar"><img src="@/assets/images/profile.png" alt="프로필 이미지" class="profile-image" /></div>
           <div class="greeting">
             <p class="name">{{ userInfo.name }}님</p>
             <p class="message">반갑습니다! 아래는 현재 등록된 회원정보입니다.</p>
@@ -166,9 +166,18 @@ onMounted(loadUserInfo)
 .avatar {
   width: 64px;
   height: 64px;
-  background-color: #ddd;
+  background-color: #f8f9fa;
   border-radius: 50%;
   margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-image {
+  width: 60%;
+  height: 60%;
+  object-fit: cover;
 }
 
 .greeting .name {
